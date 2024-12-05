@@ -7,17 +7,21 @@ on:
   workflow_dispatch:
     inputs:
       TARGET:
-        default: 'MEDIATEK'
+        default: 'IPQ60XX-WIFI-NO'
         required: true
         type: choice
-        options: [MEDIATEK, ROCKCHIP, X86, IPQ60XX-WIFI-YES, IPQ60XX-WIFI-NO, IPQ807X-WIFI-YES, IPQ807X-WIFI-NO, TEST]
+        options: [IPQ60XX-WIFI-NO, TEST]
       SOURCE:
         default: 'VIKINGYFY/immortalwrt'
         required: true
         type: choice
-        options: [VIKINGYFY/immortalwrt, immortalwrt/immortalwrt, LiBwrt-op/openwrt-6.x, qosmio/openwrt-ipq]
+        options: [VIKINGYFY/immortalwrt, immortalwrt/immortalwrt, LiBwrt-op/openwrt-6.x, qosmio/openwrt-ipq,coolsnowwolf/lede]
       BRANCH:
         default: 'main'
+        required: true
+        type: string
+      SUFFIX:
+        default: 'IMM'
         required: true
         type: string
       PACKAGE:
@@ -25,7 +29,7 @@ on:
         type: string
       TEST:
         description: '仅输出配置文件，不编译固件。'
-        default: 'true'
+        default: true
         required: true
         type: boolean
 
@@ -44,21 +48,19 @@ jobs:
       #默认主题
       WRT_THEME: argon
       #默认主机名
-      WRT_NAME: OWRT
-      #默认WIFI名称
-      WRT_SSID: OWRT
-      #默认WIFI密码
-      WRT_WORD: 12345678
+      WRT_NAME: TWRT
       #默认地址
       WRT_IP: 192.168.10.1
       #默认密码，仅作提示，修改无用
-      WRT_PW: 无
+      WRT_PW: password|none
       #源码链接
       WRT_REPO: https://github.com/${{inputs.SOURCE}}.git
       #源码分支
       WRT_BRANCH: ${{inputs.BRANCH}}
       #源码名称
       WRT_SOURCE: ${{inputs.SOURCE}}
+      #后缀名称
+      WRT_SUFFIX: ${{inputs.SUFFIX}}
       #插件调整
       WRT_PACKAGE: ${{inputs.PACKAGE}}
       #仅输出配置文件

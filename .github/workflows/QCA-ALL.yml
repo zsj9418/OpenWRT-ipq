@@ -17,7 +17,7 @@ on:
         type: string
       TEST:
         description: '仅输出配置文件，不编译固件。'
-        default: 'false'
+        default: false
         required: false
         type: boolean
 
@@ -30,11 +30,15 @@ jobs:
     name: ${{matrix.TARGET}}
     strategy:
       fail-fast: false
-      #max-parallel: 3
+      #max-parallel: 2
       matrix:
-        TARGET: [IPQ60XX-WIFI-YES, IPQ60XX-WIFI-NO, IPQ807X-WIFI-YES, IPQ807X-WIFI-NO]
-        SOURCE: [VIKINGYFY/immortalwrt]
-        BRANCH: [main]
+        TARGET: [IPQ60XX-WIFI-NO]
+        REPO_INFO:
+          - {SOURCE: coolsnowwolf/lede, BRANCH: master, NAME: LEDE, SUFFIX: LEDE}
+          - {SOURCE: coolsnowwolf/lede, BRANCH: master, NAME: LEDE-FW4, SUFFIX: LEDE-FW4}
+          #- {SOURCE: VIKINGYFY/immortalwrt, BRANCH: main, NAME: OWRT, SUFFIX: IMM}
+          #- {SOURCE: LiBwrt-op/openwrt-6.x, BRANCH: openwrt-24.10, NAME: LibWRT, SUFFIX: IMM}
+          #- {SOURCE: immortalwrt/immortalwrt, BRANCH: openwrt-24.10, NAME: ImmortalWRT, SUFFIX: IMM}
 
     #调用公用编译核心WRT-CORE.yml
     uses: ./.github/workflows/WRT-CORE.yml
@@ -44,21 +48,19 @@ jobs:
       #默认主题
       WRT_THEME: argon
       #默认主机名
-      WRT_NAME: OWRT
-      #默认WIFI名称
-      WRT_SSID: OWRT
-      #默认WIFI密码
-      WRT_WORD: 12345678
+      WRT_NAME: ${{matrix.REPO_INFO.NAME}}
       #默认地址
       WRT_IP: 192.168.10.1
       #默认密码，仅作提示，修改无用
-      WRT_PW: 无
+      WRT_PW: password|none
       #源码链接
-      WRT_REPO: https://github.com/${{matrix.SOURCE}}.git
+      WRT_REPO: https://github.com/${{matrix.REPO_INFO.SOURCE}}.git
       #源码分支
-      WRT_BRANCH: ${{matrix.BRANCH}}
+      WRT_BRANCH: ${{matrix.REPO_INFO.BRANCH || 'main'}}
       #源码名称
-      WRT_SOURCE: ${{matrix.SOURCE}}
+      WRT_SOURCE: ${{matrix.REPO_INFO.SOURCE}}
+      #后缀名称
+      WRT_SUFFIX: ${{matrix.REPO_INFO.SUFFIX}}
       #插件调整
       WRT_PACKAGE: ${{inputs.PACKAGE}}
       #仅输出配置文件

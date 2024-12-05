@@ -8,9 +8,12 @@ on:
   workflow_dispatch:
     inputs:
       NUMBER:
-        default: '0'
+        default: '8'
         required: false
         type: string
+
+env:
+  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
 permissions: write-all
 
@@ -18,12 +21,14 @@ jobs:
   auto_clean:
     runs-on: ubuntu-22.04
     steps:
-      - name: Delete old Releases and Workflows
-        uses: ophub/delete-releases-workflows@main
+      - name: Delete Old Releases
+        uses: dev-drprasad/delete-older-releases@master
         with:
-          gh_token: ${{secrets.GITHUB_TOKEN}}
-          delete_releases: true
-          releases_keep_latest: ${{inputs.NUMBER || '0'}}
+          keep_latest: ${{inputs.NUMBER || '8'}}
           delete_tags: true
-          delete_workflows: true
-          workflows_keep_day: 0
+
+      - name: Delete Old Workflows
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          retain_days: 0
+          keep_minimum_runs: 1
