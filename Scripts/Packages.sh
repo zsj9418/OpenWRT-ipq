@@ -7,11 +7,6 @@ DELETE_PACKAGE() {
 	rm -rf $(find ./ ../feeds/luci/ ../feeds/packages/ -maxdepth 3 -type d -iname "$PKG_NAME" -prune)
 }
 
-DELETE_PACKAGE "vlmcsd"
-DELETE_PACKAGE "luci-app-vlmcsd"
-DELETE_PACKAGE "vsftpd"
-DELETE_PACKAGE "luci-app-vsftpd"
-
 
 #安装和更新软件包
 UPDATE_PACKAGE() {
