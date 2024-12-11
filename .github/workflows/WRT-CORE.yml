@@ -246,7 +246,7 @@ jobs:
 
       - name: Release Firmware
         if: ${{ env.WRT_NEED_COMPILE == 'true' }}
-        uses: softprops/action-gh-release@master
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: R${{ env.WRT_DATE }}_${{ env.WRT_NAME }}
           name: R${{ env.WRT_DATE }} for ${{ env.WRT_NAME }}
