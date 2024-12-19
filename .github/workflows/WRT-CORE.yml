@@ -37,6 +37,9 @@ on:
       WRT_TEST:
         required: false
         type: string
+      WRT_COMMIT:
+        required: false
+        type: string
 
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -51,6 +54,7 @@ env:
   WRT_SUFFIX: ${{inputs.WRT_SUFFIX}}
   WRT_PACKAGE: ${{inputs.WRT_PACKAGE}}
   WRT_TEST: ${{inputs.WRT_TEST}}
+  WRT_COMMIT: ${{inputs.WRT_COMMIT}}
 
 jobs:
   core:
@@ -75,8 +79,12 @@ jobs:
         run: |
           git clone --depth=1 --single-branch --branch $WRT_BRANCH $WRT_REPO ./wrt/
 
-          cd ./wrt/ && echo "WRT_HASH=$(git log -1 --pretty=format:'%h')" >> $GITHUB_ENV
-
+          cd ./wrt/
+          if [ -n "$WRT_COMMIT" ]; then
+            git fetch --depth=1 origin $WRT_COMMIT
+            git checkout $WRT_COMMIT
+          fi
+          echo "WRT_HASH=$(git log -1 --pretty=format:'%h')" >> $GITHUB_ENV
 
       - name: Check Repo Log
         run: |

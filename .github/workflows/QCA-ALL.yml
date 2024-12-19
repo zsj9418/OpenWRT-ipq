@@ -23,6 +23,11 @@ on:
         default: false
         required: false
         type: boolean
+      COMMIT:
+        description: '指定Commit。'
+        required: false
+        type: string
+
 
 #CI权限
 permissions: write-all
@@ -62,6 +67,8 @@ jobs:
       WRT_BRANCH: ${{matrix.REPO_INFO.BRANCH || 'main'}}
       #源码名称
       WRT_SOURCE: ${{matrix.REPO_INFO.SOURCE}}
+      #源码COMMIT
+      WRT_COMMIT: ${{inputs.COMMIT}}
       #后缀名称
       WRT_SUFFIX: ${{matrix.REPO_INFO.SUFFIX}}
       #插件调整
