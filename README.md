@@ -31,20 +31,11 @@
 ### LEDE: 
     带NSS的6.1内核固件，默认主题为Argon；默认使用iptable防火墙（fw3）。
     默认管理地址：192.168.10.1 默认用户：root 默认密码：password
-### LEDE-FW4:    
-    带NSS的6.1内核固件，默认主题为Argon；默认使用nftables防火墙（fw4）。
-    默认管理地址：192.168.10.1 默认用户：root 默认密码：password
 
 ## 固件下载
 只编译LEDE，如需OWRT、LibWRT,请前往对应的仓库下载.
 
 ### LEDE: 
-
-<https://github.com/ftkey/OpenWRT-CI/releases>
-    
-### LEDE-FW4:
-
-（实验性产物，LEDE的qca对fw4支持不好）
 
 <https://github.com/ftkey/OpenWRT-CI/releases>
     
@@ -83,8 +74,7 @@
 <details><summary>CONFIG_PACKAGE_luci-app-xxx=y</summary>
     
     ```
-    CONFIG_PACKAGE_luci-app-ssr-plus=y // LEDE|LEDE-FW4
-    CONFIG_PACKAGE_luci-app-homeproxy=y // LEDE-FW4
+    CONFIG_PACKAGE_luci-app-ssr-plus=y // LEDE
     CONFIG_PACKAGE_luci-app-advancedplus=y  # 高级设置
     CONFIG_PACKAGE_luci-app-alist=y  # Alist网络服务
     CONFIG_PACKAGE_luci-app-cpufreq=y  # CPU频率策略控制
