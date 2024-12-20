@@ -3,9 +3,9 @@ name: QCA-ALL
 
 #CI计划
 on:
-  #自动清理：每天早上4点
+  #自动清理：每天早上5点
   schedule:
-   - cron: 0 20 * * *
+   - cron: 0 21 * * *
   #自动编译：当Auto-Clean运行完成后
   #workflow_run:
   #  workflows: ["Auto-Clean"]
@@ -43,7 +43,7 @@ jobs:
         TARGET: [IPQ60XX-WIFI-NO]
         REPO_INFO:
           - {SOURCE: coolsnowwolf/lede, BRANCH: master, NAME: LEDE, SUFFIX: LEDE}
-          - {SOURCE: coolsnowwolf/lede, BRANCH: master, NAME: LEDE-FW4, SUFFIX: LEDE-FW4}
+          #- {SOURCE: coolsnowwolf/lede, BRANCH: master, NAME: LEDE-FW4, SUFFIX: LEDE-FW4}
           #- {SOURCE: VIKINGYFY/immortalwrt, BRANCH: main, NAME: OWRT, SUFFIX: IMM}
           #- {SOURCE: LiBwrt-op/openwrt-6.x, BRANCH: openwrt-24.10, NAME: LibWRT, SUFFIX: IMM}
           #- {SOURCE: immortalwrt/immortalwrt, BRANCH: openwrt-24.10, NAME: ImmortalWRT, SUFFIX: IMM}
@@ -60,7 +60,7 @@ jobs:
       #默认地址
       WRT_IP: 192.168.10.1
       #默认密码，仅作提示，修改无用
-      WRT_PW: password|none
+      WRT_PW: password
       #源码链接
       WRT_REPO: https://github.com/${{matrix.REPO_INFO.SOURCE}}.git
       #源码分支
