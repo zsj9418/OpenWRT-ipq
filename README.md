@@ -3,9 +3,11 @@
 
 如需自定义, 请fork.
 
-只编译: 
+只编译(无WIFI): 
 
+    ipq60xx_DEVICE_jdcloud_re-ss-01=y # 京东云RE-SS-01 (亚瑟)
     ipq60xx_DEVICE_jdcloud_re-cs-07=y # 京东云RE-CS-07 (太乙)
+    ipq60xx_DEVICE_zn_m2=y # 兆能M2
 
 可编译: 
 
@@ -14,6 +16,7 @@
     ipq60xx_DEVICE_glinet_gl-axt1800=y # GL.iNet GL-AXT1800
     ipq60xx_DEVICE_jdcloud_re-ss-01=y # 京东云RE-SS-01 (亚瑟)
     ipq60xx_DEVICE_jdcloud_re-cs-02=y # 京东云RE-CS-02 (雅典娜)
+    ipq60xx_DEVICE_jdcloud_re-cs-07=y # 京东云RE-CS-07 (太乙)
     ipq60xx_DEVICE_qihoo_360v6=y # 奇虎360V6
     ipq60xx_DEVICE_redmi_ax5-jdcloud=y # 红米AX5（京东云版）
     ipq60xx_DEVICE_redmi_ax5=y # 红米AX5
@@ -31,6 +34,9 @@
 ### LEDE: 
     带NSS的6.1内核固件，默认主题为Argon；默认使用iptable防火墙（fw3）。
     默认管理地址：192.168.10.1 默认用户：root 默认密码：password
+
+### OWRT(同配置): 
+<https://github.com/ftkey/ER1-WRT-CI>
 
 ## 固件下载
 只编译LEDE，如需OWRT、LibWRT,请前往对应的仓库下载.
