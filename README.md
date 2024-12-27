@@ -7,7 +7,6 @@
 
     ipq60xx_DEVICE_jdcloud_re-ss-01=y # 京东云RE-SS-01 (亚瑟)
     ipq60xx_DEVICE_jdcloud_re-cs-07=y # 京东云RE-CS-07 (太乙)
-    ipq60xx_DEVICE_zn_m2=y # 兆能M2
 
 可编译: 
 
@@ -17,11 +16,12 @@
     ipq60xx_DEVICE_jdcloud_re-ss-01=y # 京东云RE-SS-01 (亚瑟)
     ipq60xx_DEVICE_jdcloud_re-cs-02=y # 京东云RE-CS-02 (雅典娜)
     ipq60xx_DEVICE_jdcloud_re-cs-07=y # 京东云RE-CS-07 (太乙)
+    ipq60xx_DEVICE_linksys_mr7350=y # Linksys MR7350 路由器
     ipq60xx_DEVICE_qihoo_360v6=y # 奇虎360V6
     ipq60xx_DEVICE_redmi_ax5-jdcloud=y # 红米AX5（京东云版）
-    ipq60xx_DEVICE_redmi_ax5=y # 红米AX5
-    ipq60xx_DEVICE_xiaomi_ax1800=y # 小米AX1800
-    ipq60xx_DEVICE_zn_m2=y # 兆能M2
+    ipq60xx_DEVICE_xiaomi_rm1800=y # 红米AX5
+    ipq60xx_DEVICE_xiaomi_ax1800=y # 小米AX1800 (被LEDE移除)
+    ipq60xx_DEVICE_zn_m2=y # 兆能M2  (被LEDE移除)
 
 ## 云编译OpenWRT固件
 [![QCA-ALL](https://github.com/ftkey/OpenWRT-CI/actions/workflows/QCA-ALL.yml/badge.svg)](https://github.com/ftkey/OpenWRT-CI/actions/workflows/QCA-ALL.yml)
