@@ -108,6 +108,7 @@ jobs:
       - name: Free Disk Space
         uses: endersonmenezes/free-disk-space@main
         with:
+          testing: false
           remove_android: true
           remove_dotnet: true
           remove_haskell: true
@@ -122,7 +123,6 @@ jobs:
             /usr/local/share/vcpkg/ports/llvm* /usr/local/share/vcpkg/ports/mysql* /usr/local/share/vcpkg/ports/snap* \
             /usr/share/azure* /usr/share/dotnet* /usr/share/glade* /usr/share/miniconda* /usr/share/php* /usr/share/swift \
             /var/lib/mysql* /var/log/azure*"
-          testing: false
 
       - name: Initialization Environment
         env:
@@ -134,7 +134,7 @@ jobs:
           sudo -E apt -yqq autoremove --purge
           sudo -E apt -yqq autoclean
           sudo -E apt -yqq clean
-          sudo -E apt -yqq install dos2unix
+          sudo -E apt -yqq install dos2unix libfuse-dev
           sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh)'
           sudo -E systemctl daemon-reload
           sudo -E timedatectl set-timezone "Asia/Shanghai"
@@ -150,6 +150,7 @@ jobs:
         uses: actions/cache@main
         with:
           key: ${{env.WRT_TARGET}}-${{env.WRT_VER}}-${{env.WRT_HASH}}
+          restore-keys: ${{env.WRT_TARGET}}-${{env.WRT_VER}}
           path: |
             ./wrt/.ccache
             ./wrt/staging_dir/host*
@@ -158,17 +159,22 @@ jobs:
       - name: Update Caches
         if: ${{ env.WRT_TEST != 'true' && env.WRT_NEED_COMPILE == 'true' }}
         run: |
-          if ${{steps.check-cache.outputs.cache-hit == 'true'}}; then
-            sed -i 's/ $(tool.*\/stamp-compile)//g' ./wrt/Makefile
-            sed -i 's/ $(tool.*\/stamp-install)//g' ./wrt/Makefile
+          if [ -d "./wrt/staging_dir" ]; then
+            find "./wrt/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r DIR; do
+              find "$DIR" -type f -exec touch {} +
+            done
+
+            mkdir -p ./wrt/tmp && echo "1" > ./wrt/tmp/.build
 
             echo "toolchain skiped done!"
           else
-            gh extension install actions/gh-actions-cache
+            echo "caches missed!"
+          fi
 
-            CACHE_LIST=$(gh actions-cache list --key "$WRT_TARGET-$WRT_VER" | cut -f 1)
+          if ${{steps.check-cache.outputs.cache-hit != 'true'}}; then
+            CACHE_LIST=$(gh cache list --key "$WRT_TARGET-$WRT_VER" | cut -f 1)
             for CACHE_KEY in $CACHE_LIST; do
-               gh actions-cache delete $CACHE_KEY --confirm
+               gh cache delete $CACHE_KEY
             done
 
             echo "caches cleanup done!"
@@ -193,7 +199,6 @@ jobs:
         run: |
           cd ./wrt/
 
-          rm -rf ./tmp* ./.config*
           cat $GITHUB_WORKSPACE/Config/GENERAL.txt $GITHUB_WORKSPACE/Config/$WRT_TARGET-$WRT_SUFFIX.txt >> .config
 
           $GITHUB_WORKSPACE/Scripts/Settings.sh
@@ -238,6 +243,7 @@ jobs:
           cp -f ./seed.config ./upload/Config_"$WRT_TARGET"_"$WRT_NAME"_"$WRT_VER"_"$WRT_DATE".seed.txt
 
           if [[ $WRT_TEST != 'true' ]]; then
+            KVER=$(find ./bin/targets/ -type f -name "*.manifest" -exec grep -oP '^kernel - \K[\d\.]+' {} \;)
             find ./bin/targets/ -iregex ".*\(buildinfo\|json\|manifest\|sha256sums\|packages\)$" -exec rm -rf {} +
             find ./bin/targets/ -iregex ".*\(initramfs-uImage\).*" -exec rm -rf {} +
 
@@ -252,6 +258,7 @@ jobs:
 
             find ./bin/targets/ -type f -exec mv -f {} ./upload/ \;
           fi
+          echo "WRT_KVER=${KVER:-none}" >> $GITHUB_ENV
 
       - name: Release Firmware
         if: ${{ env.WRT_NEED_COMPILE == 'true' }}
@@ -271,7 +278,7 @@ jobs:
             - 🌐 地址: **${{ env.WRT_IP }}**
             - 🔑 密码: **${{ env.WRT_PW }}**
             ### 🧊 固件版本
-            - 固件内核版本：**${{ env.VERSION_KERNEL }}**
+            - 固件内核版本：**${{ env.WRT_KVER }}**
             - 固件编译前最后一次➦[主源码](${{ env.WRT_REPO }})更新记录
             - ${{ env.VERSION_INFO }}
 
