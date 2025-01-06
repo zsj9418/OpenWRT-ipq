@@ -2,7 +2,7 @@
 name: QCA-ALL
 
 #CI计划
-#on:
+on:
   #自动清理：每天早上5点
  # schedule:
   # - cron: 0 21 * * *
